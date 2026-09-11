@@ -137,12 +137,15 @@ button { color: inherit; font: inherit; }
 .hero h1 span:last-child { color: transparent; -webkit-text-stroke: 1.3px var(--color-text); }
 .hero-edition {
   display: flex;
+  width: max-content;
   gap: 18px;
   align-items: center;
   margin: clamp(42px, 6vh, 70px) 0 0 .35vw;
   font-size: 11px;
   letter-spacing: .06em;
+  transition: gap .35s var(--ease-out), color .35s ease;
 }
+.hero-edition:hover { gap: 26px; color: #b94e7e; }
 .hero-edition::before {
   width: clamp(40px, 5vw, 78px);
   height: 1px;
