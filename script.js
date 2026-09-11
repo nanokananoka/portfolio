@@ -285,7 +285,7 @@ function setupObservers() {
   });
 }
 
-// 追従する作品専用カーソル
+// 作品専用viewカーソル
 let pointerX = -100;
 let pointerY = -100;
 let cursorX = -100;
