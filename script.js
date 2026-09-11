@@ -50,7 +50,7 @@ const mobileQuery = window.matchMedia("(max-width: 767px)");
 const compactDesktopQuery = window.matchMedia(
   "(max-width: 767px) and (any-hover: hover) and (any-pointer: fine)"
 );
-const precisePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+const precisePointer = window.matchMedia("(any-hover: hover) and (any-pointer: fine)");
 
 const hero = document.querySelector(".hero");
 const heroCopy = document.querySelector(".hero-copy");
