@@ -682,9 +682,9 @@ button { color: inherit; font: inherit; }
   letter-spacing: .13em;
 }
 .modal-close {
-  position: absolute;
-  top: 18px;
-  right: 18px;
+  position: fixed;
+  top: max(18px, env(safe-area-inset-top));
+  right: max(18px, env(safe-area-inset-right));
   /* 画像保護用の透明レイヤーより必ず前面に配置します。 */
   z-index: 5;
   width: 46px;
@@ -826,7 +826,13 @@ button { color: inherit; font: inherit; }
   .modal-copy h2 wbr { display: inline; }
   .modal-copy #modal-intent { margin-top: 26px; }
   .modal-number { margin-top: 34px; }
-  .modal-close { z-index: 5; width: 48px; height: 48px; }
+  .modal-close {
+    top: max(18px, env(safe-area-inset-top));
+    right: max(18px, env(safe-area-inset-right));
+    z-index: 5;
+    width: 48px;
+    height: 48px;
+  }
 
   .site-footer { min-height: 72svh; }
   .site-footer > p { font-size: clamp(48px, 15vw, 72px); }
