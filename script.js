@@ -47,6 +47,9 @@ works.forEach((work) => {
 
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 const mobileQuery = window.matchMedia("(max-width: 767px)");
+const compactDesktopQuery = window.matchMedia(
+  "(max-width: 767px) and (any-hover: hover) and (any-pointer: fine)"
+);
 const precisePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
 
 const hero = document.querySelector(".hero");
@@ -60,6 +63,10 @@ const workCursor = document.querySelector(".work-cursor");
 
 let frameRequested = false;
 let cardObserver;
+
+function usesNativeWorksScroll() {
+  return mobileQuery.matches && !compactDesktopQuery.matches;
+}
 
 function renderWorks() {
   const fragment = document.createDocumentFragment();
@@ -103,12 +110,12 @@ function getWorksProgress() {
 
 // 横スクロール
 function syncWorksScrollHeight() {
-  if (mobileQuery.matches || prefersReducedMotion.matches) {
+  if (usesNativeWorksScroll() || prefersReducedMotion.matches) {
     worksSection.style.removeProperty("--works-scroll-height");
     return;
   }
 
-  const maxTranslate = Math.max(0, track.scrollWidth - window.innerWidth);
+  const maxTranslate = Math.max(0, track.scrollWidth - viewport.clientWidth);
   const scrollDistance = Math.max(window.innerHeight * 1.25, maxTranslate * 1.15);
   worksSection.style.setProperty(
     "--works-scroll-height",
@@ -130,10 +137,10 @@ function updateHeroParallax() {
 }
 
 function updateHorizontalGallery() {
-  if (mobileQuery.matches || prefersReducedMotion.matches) return;
+  if (usesNativeWorksScroll() || prefersReducedMotion.matches) return;
 
   const progress = getWorksProgress();
-  const maxTranslate = Math.max(0, track.scrollWidth - window.innerWidth);
+  const maxTranslate = Math.max(0, track.scrollWidth - viewport.clientWidth);
   track.style.transform = `translate3d(${-maxTranslate * progress}px, 0, 0)`;
   progressBar.style.transform = `scaleX(${progress})`;
 
@@ -159,7 +166,7 @@ function requestFrameUpdate() {
 }
 
 function updateTouchProgress() {
-  if (!mobileQuery.matches && !prefersReducedMotion.matches) return;
+  if (!usesNativeWorksScroll() && !prefersReducedMotion.matches) return;
   const maxScroll = viewport.scrollWidth - viewport.clientWidth;
   const progress = maxScroll > 0 ? viewport.scrollLeft / maxScroll : 0;
   progressBar.style.transform = `scaleX(${progress})`;
@@ -257,7 +264,7 @@ function setupObservers() {
       entry.target.classList.add("is-visible");
       observer.unobserve(entry.target);
     });
-  }, { root: mobileQuery.matches ? viewport : null, threshold: 0.16 });
+  }, { root: usesNativeWorksScroll() ? viewport : null, threshold: 0.16 });
 
   document.querySelectorAll(".work-card").forEach((card, index) => {
     card.style.transitionDelay = `${Math.min(index * 45, 180)}ms`;
@@ -333,6 +340,7 @@ function resetMotionState() {
   document.querySelectorAll(".work-card").forEach((card) => {
     card.style.removeProperty("--card-rotation");
   });
+  if (!usesNativeWorksScroll()) viewport.scrollLeft = 0;
   syncWorksScrollHeight();
   requestFrameUpdate();
 }
@@ -352,6 +360,7 @@ window.addEventListener("resize", handleResize);
 window.addEventListener("load", handleResize, { once: true });
 viewport.addEventListener("scroll", updateTouchProgress, { passive: true });
 mobileQuery.addEventListener("change", resetMotionState);
+compactDesktopQuery.addEventListener("change", resetMotionState);
 prefersReducedMotion.addEventListener("change", resetMotionState);
 
 document.addEventListener("contextmenu", (event) => {

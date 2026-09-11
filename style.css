@@ -682,7 +682,8 @@ button { color: inherit; font: inherit; }
   position: absolute;
   top: 18px;
   right: 18px;
-  z-index: 2;
+  /* 画像保護用の透明レイヤーより必ず前面に配置します。 */
+  z-index: 5;
   width: 46px;
   height: 46px;
   border: 1px solid rgba(37, 35, 35, .1);
@@ -691,6 +692,7 @@ button { color: inherit; font: inherit; }
   font-size: 24px;
   line-height: 1;
   cursor: pointer;
+  pointer-events: auto;
   transition: transform .3s var(--ease-out), background-color .3s;
   backdrop-filter: blur(8px);
 }
@@ -739,12 +741,12 @@ button { color: inherit; font: inherit; }
   .hero h1 span:last-child { -webkit-text-stroke-width: 1px; }
   .hero-edition { margin-top: 30px; font-size: 9px; }
   .hero-visual {
-    width: min(65vw, 350px);
-    margin-top: 40px;
-    margin-right: 4vw;
+    width: min(72vw, 350px);
+    align-self: center;
+    margin: 40px auto 0;
   }
   .hero-art img { aspect-ratio: 4 / 4.5; }
-  .hero-index { right: -12%; }
+  .hero-index { right: -7%; }
   .scroll-cue { bottom: 26px; }
 
   .profile { padding-top: 120px; padding-bottom: 130px; }
@@ -760,7 +762,11 @@ button { color: inherit; font: inherit; }
   .desktop-break { display: none; }
   .bio { line-height: 2.05; }
 
-  .works { height: auto; padding: 112px 0 120px; }
+  .works {
+    --compact-card-width: min(80vw, 355px);
+    height: auto;
+    padding: 112px 0 120px;
+  }
   .works-scroll { position: static; display: block; height: auto; overflow: visible; padding: 0; }
   .works-heading { display: block; background: var(--color-bg-works); }
   .works-note { margin-top: 28px; }
@@ -773,12 +779,20 @@ button { color: inherit; font: inherit; }
     overscroll-behavior-inline: contain;
   }
   .works-viewport::-webkit-scrollbar { display: none; }
-  .works-track { gap: 24px; padding-right: 38px; transform: none !important; }
+  .works-track {
+    gap: 24px;
+    /* 最後の作品も中央まで送れる分の終端余白を確保します。 */
+    padding-right: max(
+      38px,
+      calc((100vw - var(--compact-card-width)) / 2)
+    );
+    transform: none;
+  }
   .work-card,
   .work-card.size-small,
   .work-card.size-tall,
   .work-card.size-wide {
-    width: min(80vw, 355px);
+    width: var(--compact-card-width);
     align-self: auto;
     scroll-snap-align: center;
     transform: none;
@@ -806,7 +820,7 @@ button { color: inherit; font: inherit; }
   .modal-copy h2 wbr { display: inline; }
   .modal-copy #modal-intent { margin-top: 26px; }
   .modal-number { margin-top: 34px; }
-  .modal-close { width: 48px; height: 48px; }
+  .modal-close { z-index: 5; width: 48px; height: 48px; }
 
   .site-footer { min-height: 72svh; }
   .site-footer > p { font-size: clamp(48px, 15vw, 72px); }
@@ -816,8 +830,33 @@ button { color: inherit; font: inherit; }
   .site-nav { gap: 0; }
   .nav-link { padding-inline: 8px; font-size: 9px; }
   .hero h1 { font-size: 50px; }
-  .hero-visual { width: 70vw; }
+  .hero-visual { width: min(76vw, 350px); }
   .section-note { display: none; }
+}
+
+/* 狭いPC幅でも、作品を見終えてからフッターへ進む固定ギャラリーにします。 */
+@media (max-width: 767px) and (any-hover: hover) and (any-pointer: fine) {
+  .works { height: var(--works-scroll-height, 300vh); padding: 0; }
+  .works-scroll {
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100svh;
+    overflow: hidden;
+    padding-top: clamp(68px, 8vh, 88px);
+  }
+  .works-heading { display: flex; }
+  .works-note { margin-top: 0; }
+  .works-viewport {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    min-height: 0;
+    overflow: visible;
+    padding-top: clamp(34px, 5vh, 54px);
+    scroll-snap-type: none;
+  }
 }
 
 @media (hover: none), (pointer: coarse) {
