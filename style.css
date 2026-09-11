@@ -682,13 +682,16 @@ button { color: inherit; font: inherit; }
   letter-spacing: .13em;
 }
 .modal-close {
-  position: fixed;
-  top: max(18px, env(safe-area-inset-top));
-  right: max(18px, env(safe-area-inset-right));
+  position: absolute;
+  top: 18px;
+  right: 18px;
   /* 画像保護用の透明レイヤーより必ず前面に配置します。 */
   z-index: 5;
+  display: grid;
   width: 46px;
   height: 46px;
+  padding: 0;
+  place-items: center;
   border: 1px solid rgba(37, 35, 35, .1);
   border-radius: 50%;
   background: rgba(255, 255, 255, .88);
@@ -698,6 +701,11 @@ button { color: inherit; font: inherit; }
   pointer-events: auto;
   transition: transform .3s var(--ease-out), background-color .3s;
   backdrop-filter: blur(8px);
+}
+.modal-close span {
+  display: block;
+  line-height: 1;
+  transform: translateY(-1px);
 }
 .modal-close:hover { transform: rotate(7deg); background: var(--color-pink-light); }
 @keyframes modal-fade { from { opacity: 0; } }
@@ -827,8 +835,6 @@ button { color: inherit; font: inherit; }
   .modal-copy #modal-intent { margin-top: 26px; }
   .modal-number { margin-top: 34px; }
   .modal-close {
-    top: max(18px, env(safe-area-inset-top));
-    right: max(18px, env(safe-area-inset-right));
     z-index: 5;
     width: 48px;
     height: 48px;
