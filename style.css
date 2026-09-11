@@ -825,8 +825,20 @@ button { color: inherit; font: inherit; }
   .works-progress { margin-top: 38px; margin-bottom: 0; }
   .work-cursor { display: none; }
 
-  .modal { align-items: end; padding: 10px; }
-  .modal-panel { display: block; width: 100%; max-height: calc(100svh - 20px); }
+  .modal {
+    align-items: start;
+    padding:
+      max(12px, env(safe-area-inset-top))
+      max(10px, env(safe-area-inset-right))
+      max(10px, env(safe-area-inset-bottom))
+      max(10px, env(safe-area-inset-left));
+  }
+  .modal-panel {
+    display: block;
+    width: 100%;
+    max-height: calc(100svh - 24px);
+    padding-top: 68px;
+  }
   .modal-media { min-height: 0; height: min(55svh, 480px); }
   .modal-copy { padding: 36px 25px 42px; }
   .modal-label { margin-bottom: 22px; }
@@ -835,6 +847,8 @@ button { color: inherit; font: inherit; }
   .modal-copy #modal-intent { margin-top: 26px; }
   .modal-number { margin-top: 34px; }
   .modal-close {
+    top: 10px;
+    right: 10px;
     z-index: 5;
     width: 48px;
     height: 48px;
