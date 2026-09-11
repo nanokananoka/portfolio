@@ -781,7 +781,11 @@ button { color: inherit; font: inherit; }
   .works-viewport::-webkit-scrollbar { display: none; }
   .works-track {
     gap: 24px;
-    /* 最後の作品も中央まで送れる分の終端余白を確保します。 */
+    /* スマホでは先頭と最後の作品をどちらも中央へ配置できる余白にします。 */
+    padding-left: max(
+      var(--space-page),
+      calc((100vw - var(--compact-card-width)) / 2)
+    );
     padding-right: max(
       38px,
       calc((100vw - var(--compact-card-width)) / 2)
@@ -797,7 +801,6 @@ button { color: inherit; font: inherit; }
     scroll-snap-align: center;
     transform: none;
   }
-  .work-card:first-child { scroll-snap-align: start; }
   .work-card img,
   .work-card.size-small img,
   .work-card.size-tall img,
@@ -857,6 +860,7 @@ button { color: inherit; font: inherit; }
     padding-top: clamp(34px, 5vh, 54px);
     scroll-snap-type: none;
   }
+  .works-track { padding-left: var(--space-page); }
   .work-button { cursor: none; }
   .work-cursor { display: grid; }
 }
