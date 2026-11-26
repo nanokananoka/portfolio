@@ -40,10 +40,18 @@ const works = [
     tools: ["Photoshop", "Illustrator"]
   },
   {
-    title: "展覧会のDM",
+    title: "展覧会のDM1",
     image: "images/works-05.png",
     alt: "四季の佐賀の風景を窓越しに並べた、横長の写真展DM",
     size: "wide",
+    category: "Exhibition DM",
+    fitArtwork: true
+  },
+  {
+    title: "展覧会のDM2",
+    image: "images/works-08.png",
+    alt: "青空に田んぼの質感をまとった球体と立方体が浮かぶ、縦長の写真展DM",
+    size: "tall",
     category: "Exhibition DM",
     fitArtwork: true
   },
