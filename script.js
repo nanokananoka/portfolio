@@ -38,6 +38,30 @@ const works = [
     category: "Illustration",
     year: "2026",
     tools: ["Photoshop", "Illustrator"]
+  },
+  {
+    title: "展覧会のDM",
+    image: "images/works-05.png",
+    alt: "四季の佐賀の風景を窓越しに並べた、横長の写真展DM",
+    size: "wide",
+    category: "Exhibition DM",
+    fitArtwork: true
+  },
+  {
+    title: "らぁめん ひぜん1",
+    image: "images/works-06.png",
+    alt: "明るい背景に赤いNEW OPENの文字とラーメンの写真を配した開店告知ポスター",
+    size: "tall",
+    category: "Poster Design",
+    fitArtwork: true
+  },
+  {
+    title: "らぁめん ひぜん2",
+    image: "images/works-07.png",
+    alt: "黒い背景に湯気の立つラーメンと大きな白いOPENの文字を配した開店告知ポスター",
+    size: "tall",
+    category: "Poster Design",
+    fitArtwork: true
   }
 ];
 
@@ -70,11 +94,14 @@ function usesNativeWorksScroll() {
 
 function renderWorks() {
   const fragment = document.createDocumentFragment();
+  const heroIndex = document.querySelector(".hero-index");
+  if (heroIndex) heroIndex.textContent = `01 / ${String(works.length).padStart(2, "0")}`;
 
   works.forEach((work, index) => {
     const number = String(index + 1).padStart(2, "0");
     const article = document.createElement("article");
     article.className = `work-card size-${work.size}`;
+    article.classList.toggle("fit-artwork", Boolean(work.fitArtwork));
     article.innerHTML = `
       <button
         class="work-button"
@@ -87,12 +114,12 @@ function renderWorks() {
           <img src="${work.image}" alt="${work.alt}" loading="lazy">
           <span class="work-hover-info" aria-hidden="true">
             <strong>${work.title}</strong>
-            <span>${work.category} / ${work.year}</span>
+            <span>${[work.category, work.year].filter(Boolean).join(" / ")}</span>
           </span>
         </span>
         <span class="work-info">
           <span class="work-title">${work.title}</span>
-          <span class="work-meta">${work.category}<br>${work.year}</span>
+          <span class="work-meta">${work.category}${work.year ? `<br>${work.year}` : ""}</span>
         </span>
       </button>`;
     fragment.appendChild(article);
@@ -202,10 +229,13 @@ function openModal(index) {
   lastFocusedElement = document.activeElement;
   modalImage.src = work.image;
   modalImage.alt = work.alt;
+  modalImage.classList.toggle("fit-artwork", Boolean(work.fitArtwork));
   renderModalTitle(work.title);
-  modalMeta.textContent = `${work.category} / ${work.year}`;
-  modalTools.textContent = work.tools.join(" / ");
-  modalIntent.textContent = work.intent;
+  modalMeta.textContent = [work.category, work.year].filter(Boolean).join(" / ");
+  modalTools.textContent = (work.tools ?? []).join(" / ");
+  modalTools.closest(".modal-tools").hidden = !modalTools.textContent;
+  modalIntent.textContent = work.intent ?? "";
+  modalIntent.hidden = !modalIntent.textContent;
   modalNumber.textContent = `${String(index + 1).padStart(2, "0")} / ${String(works.length).padStart(2, "0")}`;
   modal.hidden = false;
   document.body.classList.add("is-modal-open");
